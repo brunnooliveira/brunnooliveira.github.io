@@ -1,0 +1,87 @@
+<head>
+  <script language=JavaScript>
+    const som = document.getElementById("som");
+
+    setTimer = () => {
+      var date = new Date();
+      console.log(date);
+      const segundosParam = document.getElementsByName("segundos")[0].value;
+      const periodoParam = document.getElementsByName("periodo")[0].value;
+      const minutosCheck = [];
+      let minutes = date.getMinutes().toString();
+
+      if (periodoParam == "60") {
+        minutosCheck.push("59");
+      } else if (periodoParam == "15") {
+        minutosCheck.push("14");
+        minutosCheck.push("29");
+        minutosCheck.push("44");
+        minutosCheck.push("59");
+      } else if (periodoParam == "5") {
+        minutosCheck.push("4");
+        minutosCheck.push("9");
+        minutes = (minutes.length > 1) ? minutes.substring(1) : minutes;
+      }
+
+
+
+      if ((minutosCheck.indexOf(minutes) >= 0) && date.getSeconds().toString() === segundosParam) {
+        // if(date.getHours() >= 9 && (minutosCheck.indexOf(minutes) >= 0) && date.getSeconds().toString() === segundosParam ) {
+        // if (date.getHours() >= 9 && date.getSeconds() === 30) {
+        const som = document.getElementById("som");
+        // som.play();
+        showDateTime();
+        notifyMe();
+      }
+      setTimeout("setTimer()", 1000);
+    }
+
+    function showDateTime() {
+      const p = document.getElementById("dateTime");
+      p.innerHTML = new Date();
+      // setTimeout("showDateTime()", 1000);
+    }
+
+    // request permission on page load
+    document.addEventListener('DOMContentLoaded', function () {
+      if (!Notification) {
+        alert('Desktop notifications not available in your browser. Try Chromium.');
+        return;
+      }
+
+      if (Notification.permission !== 'granted')
+        Notification.requestPermission();
+    });
+
+
+    function notifyMe() {
+      if (Notification.permission !== 'granted')
+        Notification.requestPermission();
+      else {
+        var notification = new Notification('Notification title', {
+          icon: 'clock.png',
+          body: new Date(),
+        });
+        notification.onclick = function () {
+          window.open('http://stackoverflow.com/a/13328397/1269037');
+        };
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <button id="btnStart" onclick="setTimer()">Start</button>
+  <button onclick="notifyMe()">Notify me!</button>
+  <br />
+  Período <input type="text" name="periodo" value="5" />
+  <br />
+  Segundos <input type="text" name="segundos" value="30" />
+  <br />
+
+  <p id="dateTime"></p>
+  <audio name="audio" id="som" controls>
+    <source src="rooster.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+</body>
