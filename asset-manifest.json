@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/static/css/main.104f07ec.chunk.css",
-    "main.js": "/static/js/main.251493f5.chunk.js",
-    "main.js.map": "/static/js/main.251493f5.chunk.js.map",
+    "main.js": "/static/js/main.42b56715.chunk.js",
+    "main.js.map": "/static/js/main.42b56715.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.983f58a3.js",
     "runtime-main.js.map": "/static/js/runtime-main.983f58a3.js.map",
     "static/js/2.1d2d2b1a.chunk.js": "/static/js/2.1d2d2b1a.chunk.js",
@@ -10,17 +10,17 @@
     "static/js/3.fc814a9a.chunk.js": "/static/js/3.fc814a9a.chunk.js",
     "static/js/3.fc814a9a.chunk.js.map": "/static/js/3.fc814a9a.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.a16b5f589b5739c62b2283ffedd1e88e.js": "/precache-manifest.a16b5f589b5739c62b2283ffedd1e88e.js",
+    "precache-manifest.a3e21df371cbfac8d74563552e2f8dae.js": "/precache-manifest.a3e21df371cbfac8d74563552e2f8dae.js",
     "service-worker.js": "/service-worker.js",
     "static/css/main.104f07ec.chunk.css.map": "/static/css/main.104f07ec.chunk.css.map",
     "static/js/2.1d2d2b1a.chunk.js.LICENSE.txt": "/static/js/2.1d2d2b1a.chunk.js.LICENSE.txt",
     "static/js/3.fc814a9a.chunk.js.LICENSE.txt": "/static/js/3.fc814a9a.chunk.js.LICENSE.txt",
-    "static/media/naosejaotario.mp3": "/static/media/naosejaotario.fec033b5.mp3"
+    "static/media/campainha.mp3": "/static/media/campainha.709c3d1e.mp3"
   },
   "entrypoints": [
     "static/js/runtime-main.983f58a3.js",
     "static/js/2.1d2d2b1a.chunk.js",
     "static/css/main.104f07ec.chunk.css",
-    "static/js/main.251493f5.chunk.js"
+    "static/js/main.42b56715.chunk.js"
   ]
 }
