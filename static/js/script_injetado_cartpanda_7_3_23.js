@@ -4,15 +4,7 @@ window.cartxCheckoutUrl = '';
                         var getHtmlHead = document.getElementsByTagName('head')[0];
                         getHtmlHead.insertAdjacentHTML('beforeend', keyAnimationcss);
                         
-                        var checkoutBtncss = '<style id=\"cartx-btn-style\" type=\"text/css\">' +
-                            'body .cartx-CrtpageMainFrm input[type=\"submit\"]:not([name=\"update\"]), ' + 
-                            'body .cartx-CrtpageMainFrm button[type=\"submit\"]:not([name=\"update\"]), ' + 
-                            'body .cartx-CrtpageMainFrm button[type=\"button\"]:not([name=\"update\"]), ' + 
-                            'body .cartx-CrtpageMainFrm button[type=\"button\"]:not([name=\"minus\"]), ' + 
-                            'body .cartx-CrtpageMainFrm button[type=\"button\"]:not([name=\"plus\"]), ' + 
-                            'body .cartx_check_mainBtn[name=\"checkout\"]:not([class*=\"cartx_elem_\"]):not([name=\"update\"]), ' + 
-                            'body input.cartx_check_mainBtn:not([class*=\"cartx_elem_\"]):not([name=\"update\"]), ' + 
-                            '.custom_class { display: none !important; }body .cartx-CrtpageMainFrm .cartx_check_mainBtn.cartx_elem_mainBtn[type=\"submit\"]{ display: inline-block !important;} </style>';
+                        var checkoutBtncss = '<style id=\"cartx-btn-style\" type=\"text/css\">body .cartx-CrtpageMainFrm input[type=\"submit\"]:not([name=\"update\"]), body .cartx-CrtpageMainFrm button[type=\"submit\"]:not([name=\"update\"]), body .cartx-CrtpageMainFrm button[type=\"button\"]:not([name=\"update\"]), body .cartx-CrtpageMainFrm button[type=\"button\"]:not([name=\"minus\"]), body .cartx-CrtpageMainFrm button[type=\"button\"]:not([name=\"plus\"]), body .cartx_check_mainBtn[name=\"checkout\"]:not([class*=\"cartx_elem_\"]):not([name=\"update\"]), body input.cartx_check_mainBtn:not([class*=\"cartx_elem_\"]):not([name=\"update\"]), .custom_class { display: none !important; }body .cartx-CrtpageMainFrm .cartx_check_mainBtn.cartx_elem_mainBtn[type=\"submit\"]{ display: inline-block !important;} </style>';
                         var e_param = '';
                         var eParamInterval = setInterval(function() {
                             if(getEParam()) {
