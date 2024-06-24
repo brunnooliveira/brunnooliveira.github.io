@@ -15,11 +15,14 @@
 
             // Função para mostrar a notificação
             function showNotification() {
+                console.log("showNotification")
                 if (Notification.permission === "granted") {
                     const notification = new Notification("Lembrete", {
                         body: "Já se passaram 5 minutos!",
                         icon: "notification-icon.png"
                     });
+
+                    console.log("notification")
 
                     // Reproduz o som da notificação
                     const audio = document.getElementById('notification-sound');
@@ -28,7 +31,7 @@
             }
 
             // Configura o intervalo para 5 minutos (300.000 milissegundos)
-            setInterval(showNotification, 300000);
+            setInterval(showNotification, 1000);
         });
 
     </script>
