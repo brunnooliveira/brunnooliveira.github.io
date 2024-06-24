@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notificações a cada 5 minutos</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Verifica se o navegador suporta notificações
+            if (!("Notification" in window)) {
+                alert("Este navegador não suporta notificações de desktop.");
+            } else if (Notification.permission !== "denied") {
+                Notification.requestPermission();
+            }
+
+            // Função para mostrar a notificação
+            function showNotification() {
+                if (Notification.permission === "granted") {
+                    const notification = new Notification("Lembrete", {
+                        body: "Já se passaram 5 minutos!",
+                        icon: "notification-icon.png"
+                    });
+
+                    // Reproduz o som da notificação
+                    const audio = document.getElementById('notification-sound');
+                    audio.play();
+                }
+            }
+
+            // Configura o intervalo para 5 minutos (300.000 milissegundos)
+            setInterval(showNotification, 300000);
+        });
+
+    </script>
+</head>
+<body>
+    <h1>Notificações a cada 5 minutos</h1>
+    <p>Esta aplicação irá gerar uma notificação com som a cada 5 minutos.</p>
+    <audio id="notification-sound" src="static/media/campainha.709c3d1e.mp3" preload="auto"></audio>
+   
+</body>
+</html>
