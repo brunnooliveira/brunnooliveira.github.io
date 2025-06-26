@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calculadora de Investimentos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+        }
+        th {
+            background-color: #f2f2f2;
+            text-align: center;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .summary {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e8f5e9;
+            border-radius: 4px;
+        }
+        .summary h3 {
+            margin-top: 0;
+        }
+        #chart {
+            width: 100%;
+            height: 300px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calculadora de Investimentos</h1>
+        
+        <div class="input-group">
+            <label for="initialInvestment">Capital Inicial (R$):</label>
+            <input type="number" id="initialInvestment" value="10000" min="0">
+        </div>
+        
+        <div class="input-group">
+            <label for="monthlyContribution">Aporte Mensal (R$):</label>
+            <input type="number" id="monthlyContribution" value="2000" min="0">
+        </div>
+        
+        <div class="input-group">
+            <label for="interestRate">Taxa de Rendimento Mensal (%):</label>
+            <input type="number" id="interestRate" value="2" step="0.01" min="0">
+        </div>
+        
+        <div class="input-group">
+            <label for="period">Período (meses):</label>
+            <input type="number" id="period" value="120" min="1" max="360">
+        </div>
+        
+        <button onclick="calculate()">Calcular</button>
+        
+        <div class="summary" id="summary">
+            <h3>Resumo do Investimento</h3>
+            <p><strong>Capital Inicial:</strong> <span id="summaryInitial">R$ 0,00</span></p>
+            <p><strong>Total de Aportes:</strong> <span id="summaryContributions">R$ 0,00</span></p>
+            <p><strong>Total de Juros Ganhos:</strong> <span id="summaryInterest">R$ 0,00</span></p>
+            <p><strong>Montante Final:</strong> <span id="summaryTotal">R$ 0,00</span></p>
+        </div>
+
+        <canvas id="chart"></canvas>
+        
+        <div style="overflow-x: auto;">
+            <table id="results">
+                <thead>
+                    <tr>
+                        <th>Mês</th>
+                        <th>Aporte</th>
+                        <th>Rendimento</th>
+                        <th>Saldo</th>
+                        <th>Total Aportes</th>
+                        <th>Total Rendimentos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dados serão preenchidos via JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+    <script>
+        let chart = null;
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            }).format(value);
+        }
+        
+        function calculate() {
+            const initialInvestment = parseFloat(document.getElementById('initialInvestment').value) || 0;
+            const monthlyContribution = parseFloat(document.getElementById('monthlyContribution').value) || 0;
+            const interestRate = parseFloat(document.getElementById('interestRate').value) / 100 || 0;
+            const period = parseInt(document.getElementById('period').value) || 0;
+            
+            let balance = initialInvestment;
+            let totalContributions = initialInvestment;
+            let totalInterest = 0;
+            
+            const tableBody = document.getElementById('results').getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = '';
+            
+            const chartLabels = [];
+            const balanceData = [];
+            const contributionsData = [];
+            const interestData = [];
+            
+            // Mês 0 (situação inicial)
+            chartLabels.push(0);
+            balanceData.push(balance);
+            contributionsData.push(totalContributions);
+            interestData.push(totalInterest);
+            
+            for (let month = 1; month <= period; month++) {
+                // Adicionando o aporte mensal ao saldo
+                balance += monthlyContribution;
+                totalContributions += monthlyContribution;
+                
+                // Calculando o rendimento mensal
+                const monthlyInterest = balance * interestRate;
+                totalInterest += monthlyInterest;
+                
+                // Atualizando o saldo com o rendimento
+                balance += monthlyInterest;
+                
+                // Criando a linha na tabela
+                const row = tableBody.insertRow();
+                
+                // Inserindo as células na linha
+                const cellMonth = row.insertCell(0);
+                const cellContribution = row.insertCell(1);
+                const cellInterest = row.insertCell(2);
+                const cellBalance = row.insertCell(3);
+                const cellTotalContributions = row.insertCell(4);
+                const cellTotalInterest = row.insertCell(5);
+                
+                // Adicionando dados às células
+                cellMonth.textContent = month;
+                cellContribution.textContent = formatCurrency(monthlyContribution);
+                cellInterest.textContent = formatCurrency(monthlyInterest);
+                cellBalance.textContent = formatCurrency(balance);
+                cellTotalContributions.textContent = formatCurrency(totalContributions);
+                cellTotalInterest.textContent = formatCurrency(totalInterest);
+                
+                // Adicionando dados para o gráfico
+                chartLabels.push(month);
+                balanceData.push(balance);
+                contributionsData.push(totalContributions);
+                interestData.push(totalInterest);
+            }
+            
+            // Atualizando o resumo
+            document.getElementById('summaryInitial').textContent = formatCurrency(initialInvestment);
+            document.getElementById('summaryContributions').textContent = formatCurrency(totalContributions);
+            document.getElementById('summaryInterest').textContent = formatCurrency(totalInterest);
+            document.getElementById('summaryTotal').textContent = formatCurrency(balance);
+            
+            // Criando o gráfico
+            createChart(chartLabels, balanceData, contributionsData, interestData);
+        }
+        
+        function createChart(labels, balanceData, contributionsData, interestData) {
+            const ctx = document.getElementById('chart');
+            
+            // Destruir gráfico anterior se existir
+            if (chart) {
+                chart.destroy();
+            }
+            
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Saldo Total',
+                            data: balanceData,
+                            borderColor: 'rgb(75, 192, 192)',
+                            tension: 0.1,
+                            fill: false
+                        },
+                        {
+                            label: 'Total de Aportes',
+                            data: contributionsData,
+                            borderColor: 'rgb(54, 162, 235)',
+                            tension: 0.1,
+                            fill: false
+                        },
+                        {
+                            label: 'Total de Rendimentos',
+                            data: interestData,
+                            borderColor: 'rgb(255, 99, 132)',
+                            tension: 0.1,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Evolução do Investimento'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Mês'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Valor (R$)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Calcular automaticamente quando a página carregar
+        window.onload = calculate;
+    </script>
+</body>
+</html>
