@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dashboard consolidado para tomada de decisão rápida nos primeiros 15 minutos da abertura do mercado de futuros (mini-índice e mini-dólar).">
+  <title>StarterPack OpenTrade — Painel de Abertura de Mercado</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="brand">
+      <span class="brand-icon">⚡</span>
+      <h1 class="brand-title">StarterPack OpenTrade</h1>
+    </div>
+    
+    <div class="header-meta">
+      <div id="digital-clock" class="digital-clock">Carregando relógio...</div>
+      <div id="sync-status">Sincronizando...</div>
+      <button id="btn-refresh" class="btn" aria-label="Recarregar dados">
+        <span>↻</span> Recarregar
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="container">
+    
+    <!-- PAINEL PRINCIPAL: DECISÃO DE ABERTURA -->
+    <section id="main-decision-card" class="decision-card">
+      <div class="decision-main">
+        <div class="scenario-indicator">
+          <span class="scenario-label">Cenário Ativo:</span>
+          <span id="active-scenario-tag" class="scenario-badge">EXTERNO</span>
+        </div>
+        
+        <div class="decision-title-group">
+          <h2 id="main-direction" class="decision-direction">Processando...</h2>
+          <span id="main-direction-arrow" class="direction-arrow"></span>
+        </div>
+        
+        <div id="main-change" class="change-value">0.00%</div>
+        <div id="active-scenario-reason" class="scenario-desc">Analisando o fluxo de notícias para classificar a abertura do pregão...</div>
+      </div>
+      
+      <div class="decision-details">
+        <div class="checklist-section-title">Intensidade Estimada</div>
+        <span id="main-intensity" class="badge-intensity">Carregando...</span>
+        
+        <div class="guidance-box">
+          <div class="guidance-title">Orientação Operacional</div>
+          <p id="guidance-text">Aguarde o carregamento dos ativos...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ALERTAS DE DISCREPÂNCIA -->
+    <section id="discrepancy-container" class="discrepancy-card hidden">
+      <div class="discrepancy-title">
+        <span>⚠ ALERTA DE DISCREPÂNCIA OPERACIONAL</span>
+      </div>
+      <ul id="discrepancy-list" class="discrepancy-list">
+        <!-- Preenchido via ui.js -->
+      </ul>
+    </section>
+
+    <!-- GRID DE INFORMAÇÕES (CALENDÁRIO E COTAÇÕES) -->
+    <div class="grid-sections">
+      
+      <!-- CALENDÁRIO ECONÔMICO -->
+      <section class="card">
+        <div class="card-header">
+          <h3 class="card-title">Calendário Econômico BR (Hoje)</h3>
+          <span class="status-badge live-badge">HIGH IMPACT</span>
+        </div>
+        <div id="calendar-list" class="card-body">
+          <!-- Ocorrências preenchidas via ui.js -->
+          <div class="spinner-container" style="display: flex; justify-content: center; padding: 2rem 0;">
+            <div class="spinner"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CARD DE COTAÇÕES -->
+      <div style="display: flex; flex-direction: column; gap: 2rem;">
+        
+        <!-- COTAÇÕES EXTERNAS -->
+        <section id="card-external" class="card">
+          <div class="card-header">
+            <h3 class="card-title">Cotações Mercado Externo</h3>
+            <span id="subtotal-external" class="card-subtitle">Subtotal: 0.00%</span>
+          </div>
+          <div id="external-quotes-list" class="card-body quotes-container">
+            <!-- Tickers externos preenchidos via ui.js -->
+          </div>
+        </section>
+
+        <!-- COTAÇÕES INTERNAS -->
+        <section id="card-internal" class="card">
+          <div class="card-header">
+            <h3 class="card-title">Cotações Mercado Interno (ADRs)</h3>
+            <span id="subtotal-internal" class="card-subtitle">Subtotal: 0.00%</span>
+          </div>
+          <div id="internal-quotes-list" class="card-body quotes-container">
+            <!-- Tickers internos preenchidos via ui.js -->
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <!-- CHECKLIST OPERACIONAL -->
+    <section class="checklist-card">
+      <h3 class="checklist-title">Checklist Operacional de Referência</h3>
+      
+      <div class="checklist-grid">
+        <div class="checklist-section">
+          <h4 class="checklist-section-title">Janela Operacional</h4>
+          <p>Operar estritamente nos <strong>primeiros 15 minutos</strong> do pregão.</p>
+        </div>
+        
+        <div class="checklist-section">
+          <h4 class="checklist-section-title">Regiões de Trava</h4>
+          <p>Suporte e Resistência | Médias Móveis | LTA/LTB | Fibo | VWAP.</p>
+        </div>
+        
+        <div class="checklist-section">
+          <h4 class="checklist-section-title">Parâmetros de Risco</h4>
+          <p><strong>Stop:</strong> Máximo de 250 pontos (posicionar atrás de sombra ou região).</p>
+          <p><strong>Alvo:</strong> Parcial 1:1 do risco. Carregar restante até a próxima região.</p>
+        </div>
+        
+        <div class="checklist-section">
+          <h4 class="checklist-section-title">Filtros Operacionais</h4>
+          <ul class="checklist-items">
+            <li>
+              <label class="chk-container">
+                <input type="checkbox" id="chk-escora">
+                <span class="checkmark"></span>
+                Fluxo: Há escora ativa (avaliação manual)
+              </label>
+            </li>
+            <li>
+              <label class="chk-container">
+                <input type="checkbox" id="chk-discrepancy-status" disabled>
+                <span class="checkmark"></span>
+                <span id="label-discrepancy-status">Filtro: Sem discrepâncias</span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MOCK SIMULATION CONTROLLER PANEL -->
+  <div id="mock-container" class="mock-controller-wrapper">
+    <!-- Renderizado dinamicamente via ui.js -->
+  </div>
+
+  <!-- OVERLAY: LOADING STATE -->
+  <div id="loading-overlay" class="overlay hidden">
+    <div class="overlay-content">
+      <div class="spinner"></div>
+      <h3 class="overlay-title">Sincronizando Terminal</h3>
+      <p class="overlay-text">Buscando notícias econômicas e cotações de ativos em tempo real do mercado...</p>
+    </div>
+  </div>
+
+  <!-- OVERLAY: ERROR STATE -->
+  <div id="error-overlay" class="overlay hidden">
+    <div class="overlay-content">
+      <span style="font-size: 3rem;">⚠</span>
+      <h3 class="overlay-title">Conexão Interrompida</h3>
+      <p id="error-message" class="overlay-text">Falha ao se conectar com os servidores de cotações.</p>
+      <button id="btn-retry" class="btn btn-primary">Tentar Novamente</button>
+    </div>
+  </div>
+
+  <!-- SCRIPTS (Ordenação por dependência) -->
+  <script src="js/api.js"></script>
+  <script src="js/logic.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
