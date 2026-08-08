@@ -15,6 +15,15 @@ const ASSETS_CONFIG = {
   BOLSY: { ticker: 'BOLSY', exchange: 'OTC', type: 'interno', name: 'B3 S.A. ADR' }
 };
 
+// Helper para gerar um timestamp ISO de hoje em um horário específico (BRT, UTC-3)
+function getMockTimeString(hoursStr) {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}T${hoursStr}:00-03:00`;
+}
+
 // Dados simulados para o Mock Mode
 const MOCK_DATA_SCENARIOS = {
   // Cenário Interno sem discrepâncias
@@ -26,9 +35,9 @@ const MOCK_DATA_SCENARIOS = {
         { event_id: 2008, short_name: "Dívida Bruta/PIB", source: "Banco Central", country_id: 32, importance: "high" }
       ],
       occurrences: [
-        { event_id: 2008, occurrence_time: new Date().toISOString(), actual: 81.1, forecast: 80.5, previous: 80.2, unit: "%", actual_to_forecast: "positive" },
-        { event_id: 1342, occurrence_time: new Date().toISOString(), actual: -56.1, forecast: -60.0, previous: 24.6, unit: "B", actual_to_forecast: "positive" },
-        { event_id: 1523, occurrence_time: new Date().toISOString(), actual: 72.9, forecast: 115.0, previous: 85.8, unit: "K", actual_to_forecast: "negative" }
+        { event_id: 2008, occurrence_time: getMockTimeString('09:00'), actual: 81.1, forecast: 80.5, previous: 80.2, unit: "%", actual_to_forecast: "positive" },
+        { event_id: 1342, occurrence_time: getMockTimeString('09:00'), actual: -56.1, forecast: -60.0, previous: 24.6, unit: "B", actual_to_forecast: "positive" },
+        { event_id: 1523, occurrence_time: getMockTimeString('17:10'), actual: 72.9, forecast: 115.0, previous: 85.8, unit: "K", actual_to_forecast: "negative" }
       ]
     },
     assets: {
@@ -65,7 +74,7 @@ const MOCK_DATA_SCENARIOS = {
         { event_id: 2008, short_name: "Dívida Bruta/PIB", source: "Banco Central", country_id: 32, importance: "high" }
       ],
       occurrences: [
-        { event_id: 2008, occurrence_time: new Date().toISOString(), actual: 81.1, forecast: 80.5, previous: 80.2, unit: "%", actual_to_forecast: "positive" }
+        { event_id: 2008, occurrence_time: getMockTimeString('09:00'), actual: 81.1, forecast: 80.5, previous: 80.2, unit: "%", actual_to_forecast: "positive" }
       ]
     },
     assets: {
@@ -87,7 +96,7 @@ const MOCK_DATA_SCENARIOS = {
         { event_id: 2008, short_name: "Dívida Bruta/PIB", source: "Banco Central", country_id: 32, importance: "high" }
       ],
       occurrences: [
-        { event_id: 2008, occurrence_time: new Date().toISOString(), actual: 81.1, forecast: 80.5, previous: 80.2, unit: "%", actual_to_forecast: "positive" }
+        { event_id: 2008, occurrence_time: getMockTimeString('09:00'), actual: 81.1, forecast: 80.5, previous: 80.2, unit: "%", actual_to_forecast: "positive" }
       ]
     },
     assets: {

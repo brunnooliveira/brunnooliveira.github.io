@@ -5,20 +5,66 @@
  */
 
 /**
- * Determina se o cenário é Interno ou Externo com base nos eventos do calendário econômico.
- * @param {Array} events - Lista de eventos do dia
+ * Determina se o cenário é Interno ou Externo com base nos eventos e ocorrências do calendário econômico.
+ * O cenário é 'interno' somente se houver notícia de alto impacto (3 estrelas / high) do Brasil (country_id === 32)
+ * agendada especificamente para o horário de abertura dos futuros (09:00 BRT).
+ * 
+ * @param {Object|Array} eventsOrCalendar - Objeto calendar ({ events, occurrences }) ou array de events
+ * @param {Array} [occurrencesParam] - Lista de ocorrências se o 1º parâmetro for array de events
  * @returns {string} 'interno' ou 'externo'
  */
-function determineActiveScenario(events) {
-  if (!events || !Array.isArray(events)) {
+function determineActiveScenario(eventsOrCalendar, occurrencesParam) {
+  let events = [];
+  let occurrences = [];
+
+  if (eventsOrCalendar && typeof eventsOrCalendar === 'object' && !Array.isArray(eventsOrCalendar)) {
+    events = Array.isArray(eventsOrCalendar.events) ? eventsOrCalendar.events : [];
+    occurrences = Array.isArray(eventsOrCalendar.occurrences) ? eventsOrCalendar.occurrences : [];
+  } else if (Array.isArray(eventsOrCalendar)) {
+    events = eventsOrCalendar;
+    occurrences = Array.isArray(occurrencesParam) ? occurrencesParam : [];
+  } else {
     return 'externo';
   }
-  
-  // O cenário ativo é interno se há pelo menos um evento com país Brasil (country_id === 32)
-  // e importância high. O endpoint já filtra por isso, mas fazemos a verificação por segurança.
-  const hasInternalHighImpact = events.some(e => e.country_id === 32 && e.importance === 'high');
-  
-  return hasInternalHighImpact ? 'interno' : 'externo';
+
+  if (!events || events.length === 0) {
+    return 'externo';
+  }
+
+  // Identifica IDs de eventos de alto impacto para o Brasil (country_id === 32 e importance === 'high')
+  const highImpactBrazilEventIds = new Set(
+    events
+      .filter(e => e.country_id === 32 && e.importance === 'high')
+      .map(e => e.event_id)
+  );
+
+  if (highImpactBrazilEventIds.size === 0) {
+    return 'externo';
+  }
+
+  // Verifica se há alguma ocorrência correspondente exatamente às 09:00h (horário BRT)
+  if (occurrences && occurrences.length > 0) {
+    const has0900HighImpactEvent = occurrences.some(occ => {
+      if (!highImpactBrazilEventIds.has(occ.event_id)) return false;
+      if (!occ.occurrence_time) return false;
+
+      const date = new Date(occ.occurrence_time);
+      if (isNaN(date.getTime())) return false;
+
+      const timeStr = date.toLocaleTimeString('pt-BR', {
+        timeZone: 'America/Sao_Paulo',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+      });
+
+      return timeStr === '09:00';
+    });
+
+    return has0900HighImpactEvent ? 'interno' : 'externo';
+  }
+
+  return 'externo';
 }
 
 /**

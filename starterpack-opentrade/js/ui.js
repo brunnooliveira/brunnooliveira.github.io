@@ -304,9 +304,9 @@ function renderMainPanel(activeScenario, change, direction, intensity) {
   // Motivo do Cenário Ativo
   elements.activeScenarioTag.innerHTML = activeScenario.toUpperCase();
   if (activeScenario === 'interno') {
-    elements.activeScenarioReason.innerHTML = 'Existe notícia econômica de alto impacto (3 estrelas) hoje no Brasil.';
+    elements.activeScenarioReason.innerHTML = 'Existe notícia econômica de alto impacto (3 estrelas) no Brasil às 09:00h.';
   } else {
-    elements.activeScenarioReason.innerHTML = 'Nenhuma notícia econômica de alto impacto agendada para o Brasil hoje.';
+    elements.activeScenarioReason.innerHTML = 'Nenhuma notícia econômica de alto impacto (3 estrelas) agendada para às 09:00h no Brasil.';
   }
 
   // Orientação Operacional

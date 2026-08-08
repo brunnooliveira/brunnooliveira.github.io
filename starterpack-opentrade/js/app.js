@@ -18,8 +18,8 @@ async function refreshDashboard() {
     // 2. Extrai calendário e cotações
     const { calendar, assets } = dashboardData;
     
-    // 3. Determina o Cenário (Interno se houver notícias high no Brasil, senão Externo)
-    const activeScenario = window.TradingAppLogic.determineActiveScenario(calendar.events);
+    // 3. Determina o Cenário (Interno se houver notícia 3 estrelas no Brasil às 9:00h, senão Externo)
+    const activeScenario = window.TradingAppLogic.determineActiveScenario(calendar);
     
     // 4. Calcula o Change Consolidado do Cenário Ativo
     const totalChange = window.TradingAppLogic.calculateChange(activeScenario, assets);
